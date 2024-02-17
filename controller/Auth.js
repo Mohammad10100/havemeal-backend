@@ -12,8 +12,7 @@ exports.signup = async (req, res) => {
 	try {
 		// Destructure fields from the request body
 		const {
-            firstName,
-            lastName,
+            name,
             email,
             password,
             confirmPassword,
@@ -24,8 +23,7 @@ exports.signup = async (req, res) => {
         } = req.body;
 		// Check if All Details are there or not
 		if (
-			!firstName ||
-			!lastName ||
+			!name ||
 			!email ||
 			!password ||
 			!address ||
@@ -83,14 +81,13 @@ exports.signup = async (req, res) => {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const user = await User.create({
-			firstName,
-            lastName,
+			name,
             email,
             contactNumber,
             password: hashedPassword,
             accountType,
             address,
-            image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+            image: `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
 		});
 
 		//do not send the hashed password in response
@@ -201,15 +198,15 @@ exports.sendotp = async (req, res) => {
 			lowerCaseAlphabets: false,
 			specialChars: false,
 		});
-		const result = await OTP.findOne({ otp: otp });
-		
 		console.log("OTP", otp);
-		console.log("Result", result);
-		while (result) {
-			otp = otpGenerator.generate(6, {
-				upperCaseAlphabets: false,
-			});
-		}
+		
+		// const result = await OTP.findOne({ otp: otp });
+		// console.log("Result", result);
+		// while (result) {
+		// 	otp = otpGenerator.generate(6, {
+		// 		upperCaseAlphabets: false,
+		// 	});
+		// }
 		const otpPayload = { email, otp };
 		const otpBody = await OTP.create(otpPayload);
 		console.log("OTP Body", otpBody);

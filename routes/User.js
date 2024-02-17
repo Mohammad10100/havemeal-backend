@@ -3,7 +3,7 @@ const express = require("express")
 const router = express.Router()
 
 // importing controllers
-const { login, signup, sendotp, changePassword } = require("../controller/Auth")
+const { login, signup, sendotp, sendotpsms, changePassword } = require("../controller/Auth")
 const { resetPasswordToken, resetPassword } = require("../controller/ResetPassword")
 
 //importing middlewares
